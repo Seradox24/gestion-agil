@@ -20,7 +20,7 @@ export class FirestoreService {
   return collection.doc(id).set(data);  
   }
 
-  getCollection(path:string,id:string){
+  getdoc(path:string,id:string){
   const collection = this.firestore.collection(path);
   return collection.doc(id).valueChanges; 
   }
@@ -35,5 +35,13 @@ export class FirestoreService {
   return collection.doc(id).delete(); 
   }
 
+  getId(){
+    return this.firestore.createId();
+  }
+
+  getCollection<tipo>(path:string){
+    const collection = this.firestore.collection<tipo>(path);
+    return collection.valueChanges();
+  }
 
 }

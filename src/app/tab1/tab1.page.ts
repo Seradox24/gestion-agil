@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { CreaeventPage } from '../creaevent/creaevent.page';
 
 @Component({
   selector: 'app-tab1',
@@ -7,9 +9,15 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
+async mostrarModel(){
  
+    const modal = await this.modalCtrl.create({
+      component: CreaeventPage,
+    });
+    modal.present();
+}
 
   //slide
 public slideOpts2 = {
