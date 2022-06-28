@@ -1,6 +1,22 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CreaeventPage } from '../creaevent/creaevent.page';
+import { RegistroPage } from '../registro/registro.page';
+import { FirestoreService } from '../services/firestore.service';
+import { FireauthService } from '../services/fireauth.service';
+import { Evento } from '../models';
+
+
+interface Usuarios {
+  name: string,
+  nickname:string,
+  telefono: string,
+  email:string,
+  password:string,
+  uid:string,
+  foto:string,
+}
+
 
 @Component({
   selector: 'app-tab1',
@@ -8,16 +24,85 @@ import { CreaeventPage } from '../creaevent/creaevent.page';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
+  eventos: Evento[]=[];
+  usuario:Usuarios = {
+    name: '',
+    nickname:'',
+    telefono: '',
+    email:'',
+    password:'',
+    uid:'',
+    foto:'',
+  };
 
-  constructor(private modalCtrl: ModalController) {}
 
+  constructor(private modalCtrl: ModalController,
+     public auth:FireauthService,
+     public firestore:FirestoreService,) {
+      this.getinfo();
+
+      this.auth.stateAuth().subscribe(res=>{
+        console.log(res.uid)
+        if(res!==null){
+          this.uid=res.uid;
+          this.getUserInfo(this.uid);
+          console.log(res)
+
+        }else{
+          this.uid='';
+          this.initUsuario();
+
+        }
+      })
+    
+  }
+
+  
+  
+  uid= '';
+
+  initUsuario(){
+    this.usuario= {
+      name: '',
+      nickname:'',
+      telefono: '',
+      email:'',
+      password:'',
+      uid:'',
+      foto:'',
+    };
+  }
+  
+  getUserInfo(uid:string){
+    const path= 'Usuarios';
+    this.firestore.getDoc<Usuarios>(path,uid).subscribe(res=>{
+       this.usuario=res ;
+    });
+  }
 async mostrarModel(){
- 
+  if(this.uid!==''){
     const modal = await this.modalCtrl.create({
       component: CreaeventPage,
     });
     modal.present();
+  }else{
+    console.log('registrate')
+  }
+ 
+   
 }
+
+async mostrarLogin(){
+  const modal = await this.modalCtrl.create({
+    component: RegistroPage,
+  });
+  modal.present();
+}
+private path ='eventos/';
+getinfo(){
+  this.firestore.getCollection<Evento>(this.path).subscribe(res=>{
+    this.eventos=res
+})}
 
   //slide
 public slideOpts2 = {

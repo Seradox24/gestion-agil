@@ -1,14 +1,16 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+      Home
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
 
-  
+  <ion-text color="primary">
+    <h1>Novedades</h1>
+  </ion-text>
     <ion-slides pager="true" [options]="slideOpts2">
       <ion-slide>
         <img src="../assets/test1.jpg" alt="">
@@ -21,24 +23,43 @@
       </ion-slide>
     </ion-slides>
 
+    <ion-text color="primary">
+      <h1>Ultimos Eventos</h1>
+    </ion-text>
+<div *ngFor='let evento of eventos'>
+
   <ion-card>
-    <img src="../assets/test1.jpg" alt="">
+    <img src="{{evento.foto}}" alt="">
     <ion-card-header>
-      <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-      <ion-card-title>Card Title</ion-card-title>
+      <ion-card-subtitle>{{evento.usuario}}</ion-card-subtitle>
+      <ion-card-title>{{evento.nombre}}</ion-card-title>
+      <ion-text color="primary">
+        <h6>{{evento.fecha.seconds | date}}</h6>
+      </ion-text>
     </ion-card-header>
   
     <ion-card-content>
-      Keep close to Nature's heart... and break clear away, once in awhile,
-      and climb a mountain or spend a week in the woods. Wash your spirit clean.
+      {{evento.contexto}}
     </ion-card-content>
+    <ion-item>
+      <ion-label position="floating">Comentar</ion-label>
+      <ion-buttons slot="end">
+        <ion-icon class="btnx" name="send"></ion-icon>
+      </ion-buttons>
+      <ion-input></ion-input>
+     
+    </ion-item>
   </ion-card>
   
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="mostrarModel()" >
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+</div>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button   (click)="mostrarModel()" >
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+ 
 
   
 </ion-content>

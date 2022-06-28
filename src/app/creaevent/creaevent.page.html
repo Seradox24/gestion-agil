@@ -10,54 +10,67 @@
 </ion-header>
 
 <ion-content>
+<div style="text-align:end;margin:10px;">
+  <ion-button slot="icon-only"  (click)="nuevo()" shape="round">
+    Nuevo
+  </ion-button>
+</div>
+
 <img src="../assets/img/evento.svg" alt="">
-<form #formulario="ngForm" (ngSubmit) ="guardarEvento()">
- <ion-item>
-   <ion-label position="floating" >Nombre evento:</ion-label>
-   <ion-input [(ngModel)]="newEvento.nombre" type="text" inputmode="text" ></ion-input>
+<div *ngIf="enableNewEvento">
+  <form  #formulario="ngForm" (ngSubmit) ="guardarEvento()">
+  <ion-item>
+    <ion-label position="floating" >Nombre evento:</ion-label>
+    <ion-input name="nombre" [(ngModel)]="newEvento.nombre" type="text" inputmode="text" ></ion-input>
+  </ion-item>
+  <ion-item>
+   <ion-label position="floating" >Contexto:</ion-label>
+   <ion-input name="contexto" [(ngModel)]="newEvento.contexto" type="text" inputmode="text" ></ion-input>
  </ion-item>
+ 
  <ion-item>
-  <ion-label position="floating" >Contexto:</ion-label>
-  <ion-input [(ngModel)]="newEvento.contexto" type="text" inputmode="text" ></ion-input>
-</ion-item>
-
-<ion-item>
-  <ion-label position="floating" >Direccion:</ion-label>
-  <ion-input [(ngModel)]="newEvento.direccion" type="text" inputmode="text" ></ion-input>
-</ion-item>
-<ion-item >
-  <ion-label position='start' >fotografia:</ion-label>
-  
-  <ion-buttons slot="end">
-      <ion-button (click)="newProducto.foto=''" expand="block" fill="clear" shape="round">
-          <ion-icon color="danger" slot="icon-only" name="trash"></ion-icon>
-      </ion-button>
-      <ion-button >
-          <label for="file-upload">
-          <ion-icon slot="icon-only" name="image"></ion-icon>
-          </label>
-          <input (change)="newImagePro($event)" id="file-upload" style="display: none;" type="file" accept="image/*">
-      </ion-button>
-      
-  </ion-buttons>
-</ion-item>
-
-<ion-button  (click)="guardarEvento()" expand="full" >
-  Crear evento
+   <ion-label position="floating" >Direccion:</ion-label>
+   <ion-input name="direccion" [(ngModel)]="newEvento.direccion" type="text" inputmode="text" ></ion-input>
+ </ion-item>
+ <ion-item >
+   <ion-label position='start' >fotografia:</ion-label>
+ 
+   <ion-buttons slot="end">
+       <ion-button (click)="newEvento.foto=''" expand="block" fill="clear" shape="round">
+           <ion-icon color="danger" slot="icon-only" name="trash"></ion-icon>
+       </ion-button>
+       <ion-button >
+           <label for="file-upload">
+           <ion-icon slot="icon-only" name="image"></ion-icon>
+           </label>
+           <input name="foto" (change)="newImagePro($event)" id="file-upload" style="display: none;" type="file" accept="image/*">
+       </ion-button>
+       
+   </ion-buttons>
+ </ion-item>
+ 
+ <ion-img [src]="newEvento.foto"></ion-img>
+ 
+ <ion-button 
+ type="submit" expand="block"
+ >
+Guardar
 </ion-button>
-
 </form>
+</div>
+
+
 <h3 class="encabezado">Lista de productos</h3>
   <div class="formi">
   <ion-item *ngFor='let evento of eventos'>
       <ion-label>{{evento.nombre}}</ion-label>
       <ion-buttons slot="end">
   
-          <ion-button (click)="newProducto=producto;enableNewProduct=true">
-              <ion-icon slot="icon-only" name="create"></ion-icon>
+          <ion-button (click)="newEvento=evento;enableNewEvento=true">
+              <ion-icon color="warning" slot="icon-only" name="create"></ion-icon>
           </ion-button>
   
-          <ion-button (click)="deleteProduct(producto)">
+          <ion-button (click)="deleteProduct(evento)">
               <ion-icon color="danger"  slot="icon-only" name="trash-bin"></ion-icon>
           </ion-button>
           
