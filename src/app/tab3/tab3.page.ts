@@ -5,7 +5,8 @@ import { FireauthService } from '../services/fireauth.service';
 import { async } from '@firebase/util';
 import { FirestorageService } from '../services/firestorage.service';
 import { Subscription } from 'rxjs'
-
+import { Router, RouterLink } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 
 interface Usuarios {
   name: string,
@@ -62,7 +63,9 @@ export class Tab3Page implements OnInit  {
   constructor(public firestore:FirestoreService,
               private ModalCtrl: ModalController,
               public auth:FireauthService,
-              public Firestorage:FirestorageService) {
+              private router: Router,
+              public Firestorage:FirestorageService,
+              public toastController: ToastController) {
                 
                 this.estado=true;
                 this.auth.stateAuth().subscribe(res=>{
@@ -141,6 +144,8 @@ async newImagePro(event:any){
     console.log(res)
     const uid= await this.auth.getUid();
     this.guardarUsuarios();
+    this.router.navigateByUrl('/tabs/tab1');
+    this.presentToast('guardado correctamente')
   }
 
 
@@ -149,6 +154,7 @@ async newImagePro(event:any){
     this.reloadCurrentPage()
     this.ingresarDisable=false;
     this.ingresarEnable=true;
+    this.presentToast('Logout')
   }
 
 
@@ -187,6 +193,7 @@ ingresar(){
   };
   this.auth.login(credenciales.email,credenciales.password).then(res=>{
     this.reloadCurrentPage()
+    this.presentToast('Ingresado correctamente')
   })
   
 }
@@ -210,6 +217,17 @@ reloadCurrentPage() {
   this.usuario.uid= uid
   
   this.firestore.updateDoc(this.usuario,path,this.usuario.uid);
+  this.presentToast('Modificado con exito')
+  
  }
+
+
+ async presentToast(msj:string) {
+  const toast = await this.toastController.create({
+    message: msj,
+    duration: 2000
+  });
+  toast.present();
+}
 
 }

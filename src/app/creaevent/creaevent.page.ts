@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { Evento } from '../models';
 import { FirestoreService } from '../services/firestore.service';
 import { async } from '@firebase/util';
@@ -39,7 +39,7 @@ export class CreaeventPage implements OnInit {
   private path ='eventos/';
 
   constructor(private modalCtrl: ModalController, public firestore: FirestoreService,
-    public Firestorage:FirestorageService,public auth:FireauthService) {
+    public Firestorage:FirestorageService,public auth:FireauthService,public toastController: ToastController) {
 
       this.auth.stateAuth().subscribe(res=>{
         console.log(res.uid)
@@ -84,8 +84,9 @@ export class CreaeventPage implements OnInit {
     
     
     this.firestore.createDoc(this.newEvento,this.path,this.newEvento.id);
+    this.presentToast('evento guardado con exito')
     this.modalCtrl.dismiss();
-   
+    this.presentToast('evento guardado con exito')
   }
 
   getEvento(){
@@ -99,6 +100,7 @@ export class CreaeventPage implements OnInit {
 
   deleteProduct(evento:Evento){
     this.firestore.deleteDoc(this.path,evento.id);
+    this.presentToast('evento borrado con exito')
   }
 
   nuevo(){
@@ -132,5 +134,13 @@ export class CreaeventPage implements OnInit {
   reloadCurrentPage() {
     window.location.reload();
    }
+
+   async presentToast(msj:string) {
+    const toast = await this.toastController.create({
+      message: msj,
+      duration: 2000
+    });
+    toast.present();
+  }
 
 }
